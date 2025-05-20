@@ -1,24 +1,13 @@
 import { TrendingUp, AlertTriangle } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { fetchOpportunityRisk, type OpportunityRiskData } from '@/services/report-data';
 
 interface OpportunityRiskSectionProps {
   companyName: string;
 }
 
 export async function OpportunityRiskSection({ companyName }: OpportunityRiskSectionProps) {
-  // Placeholder data
-  const analysisData = {
-    opportunities: [
-      `${companyName.toUpperCase()}의 새로운 시장 부문으로의 확장.`,
-      `전략적 인수를 통한 성장 잠재력.`,
-      `${companyName.toUpperCase()} 핵심 제품에 대한 강력한 수요.`,
-    ],
-    risks: [
-      `주요 시장에서의 경쟁 심화.`,
-      `핵심 공급업체에 대한 의존성.`,
-      `다가오는 규제 변화의 잠재적 영향.`,
-    ],
-  };
+  const analysisData: OpportunityRiskData = await fetchOpportunityRisk(companyName);
 
   return (
     <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300 border-l-4 border-primary">

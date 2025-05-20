@@ -1,20 +1,13 @@
 import { Building2 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { fetchCompanyOverview, type CompanyOverview } from '@/services/report-data';
 
 interface CompanyOverviewSectionProps {
   companyName: string;
 }
 
 export async function CompanyOverviewSection({ companyName }: CompanyOverviewSectionProps) {
-  // In a real app, fetch company overview data based on companyName
-  // This is a placeholder
-  const overviewData = {
-    description: `${companyName.toUpperCase()}에 대한 개요입니다. 일반적으로 회사의 역사, 미션, 제품 및 시장에서의 위치와 같은 정보가 포함됩니다.`,
-    industry: "정보기술",
-    ceo: "김철수",
-    founded: "2000년",
-    headquarters: "대한민국 서울"
-  };
+  const overviewData: CompanyOverview = await fetchCompanyOverview(companyName);
 
   return (
     <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300 border-l-4 border-primary">

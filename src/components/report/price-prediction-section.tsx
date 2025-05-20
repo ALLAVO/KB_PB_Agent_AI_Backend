@@ -2,25 +2,40 @@
 
 import { LineChart as RechartsLineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, Legend, ResponsiveContainer } from 'recharts';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { LineChart as LineChartIcon } from 'lucide-react'; // Icon for the title
+import { LineChart as LineChartIcon } from 'lucide-react';
+import { generateMockPredictionData } from '@/lib/chart-utils';
+import type { PriceDataPoint } from '@/lib/chart-utils';
+import { useEffect, useState } from 'react';
+
 
 interface PricePredictionSectionProps {
   companyName: string;
 }
 
-// Mock data for the chart
-const generateMockPredictionData = (companyName: string) => {
-  const basePrice = companyName.length * 10 + 100; // Simple way to vary data by ticker
-  const months = ["1월", "2월", "3월", "4월", "5월", "6월"];
-  return months.map((month, index) => ({
-    date: month,
-    price: basePrice + index * Math.random() * 5,
-    predictedPrice: basePrice + index * Math.random() * 5 + (Math.random() * 10 - 5)
-  }));
-};
-
 export function PricePredictionSection({ companyName }: PricePredictionSectionProps) {
-  const data = generateMockPredictionData(companyName);
+  const [data, setData] = useState<PriceDataPoint[]>([]);
+
+  useEffect(() => {
+    setData(generateMockPredictionData(companyName));
+  }, [companyName]);
+
+  if (data.length === 0) {
+    // You can return a loading state or null here
+    return (
+        <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300 border-l-4 border-primary">
+            <CardHeader>
+                <CardTitle className="flex items-center text-2xl text-[hsl(var(--primary-text-on-light))]">
+                    <LineChartIcon className="mr-3 h-7 w-7 text-primary" />
+                    주가 예측
+                </CardTitle>
+                <CardDescription>분석 모델을 기반으로 한 {companyName.toUpperCase()}의 주가 전망 로딩 중...</CardDescription>
+            </CardHeader>
+            <CardContent className="pt-0 h-[350px] flex items-center justify-center">
+                <p>차트 데이터를 불러오고 있습니다...</p>
+            </CardContent>
+        </Card>
+    );
+  }
 
   return (
     <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300 border-l-4 border-primary">

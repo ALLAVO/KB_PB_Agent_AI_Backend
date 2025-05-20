@@ -1,27 +1,16 @@
-import { Gauge } from 'lucide-react'; // Smile, Frown removed as Gauge is more general
+import { Gauge } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { TrendingUp, TrendingDown } from 'lucide-react';
-
+import { fetchNewsSentiment, type NewsSentimentData } from '@/services/report-data';
 
 interface NewsSentimentSectionProps {
   companyName: string;
 }
 
 export async function NewsSentimentSection({ companyName }: NewsSentimentSectionProps) {
-  // Placeholder data
-  const sentimentData = {
-    overallScore: 75, // Example: 0-100 scale
-    positiveNews: [
-      `${companyName.toUpperCase()}의 긍정적인 발전 A.`,
-      `${companyName.toUpperCase()}의 성공적인 제품 B 출시.`,
-    ],
-    negativeNews: [
-      `${companyName.toUpperCase()}에 영향을 미치는 시장 문제 C.`,
-    ],
-    neutralNewsCount: 5,
-  };
+  const sentimentData: NewsSentimentData = await fetchNewsSentiment(companyName);
 
   const getSentimentColorClass = (score: number) => {
     if (score > 70) return "text-green-600";
@@ -34,7 +23,6 @@ export async function NewsSentimentSection({ companyName }: NewsSentimentSection
     if (score > 40) return "[&>div]:bg-yellow-500";
     return "[&>div]:bg-red-500";
   };
-
 
   return (
     <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300 border-l-4 border-primary">
