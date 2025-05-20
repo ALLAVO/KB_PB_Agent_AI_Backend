@@ -18,24 +18,24 @@ import {
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { toast } from "@/hooks/use-toast";
-import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+// Label removed as FormLabel is used
+// import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"; // Card components are used in parent page
 
 const reportSections = [
-  { id: "companyOverview", label: "Company Overview" },
-  { id: "latestNewsSummary", label: "Latest News Summary (AI)" },
-  { id: "newsSentiment", label: "News Sentiment Analysis" },
-  { id: "pricePrediction", label: "Stock Price Prediction" },
-  { id: "opportunityRisk", label: "Opportunity/Risk Analysis" },
+  { id: "companyOverview", label: "기업 개요" },
+  { id: "latestNewsSummary", label: "최신 뉴스 요약 (AI)" },
+  { id: "newsSentiment", label: "뉴스 감성 분석" },
+  { id: "pricePrediction", label: "주가 예측" },
+  { id: "opportunityRisk", label: "기회/위험 분석" },
 ] as const;
 
 const formSchema = z.object({
-  ticker: z.string().min(1, "Ticker is required.").max(10, "Ticker is too long.").toUpperCase(),
+  ticker: z.string().min(1, "종목 코드는 필수입니다.").max(10, "종목 코드가 너무 깁니다.").toUpperCase(),
   sections: z.array(z.string()).refine((value) => value.some((item) => item), {
-    message: "You have to select at least one section.",
+    message: "최소 하나 이상의 섹션을 선택해야 합니다.",
   }),
   detailLevel: z.enum(["concise", "detailed"], {
-    required_error: "You need to select a detail level.",
+    required_error: "분석 상세 수준을 선택해야 합니다.",
   }),
 });
 
@@ -54,8 +54,8 @@ export function ReportConfigurationForm() {
 
   function onSubmit(data: ReportConfigurationFormValues) {
     toast({
-      title: "Generating Report...",
-      description: `Ticker: ${data.ticker}, Sections: ${data.sections.join(', ')}, Detail: ${data.detailLevel}`,
+      title: "보고서 생성 중...",
+      description: `종목 코드: ${data.ticker}, 섹션: ${data.sections.join(', ')}, 상세 수준: ${data.detailLevel}`,
     });
 
     const queryParams = new URLSearchParams({
@@ -75,12 +75,12 @@ export function ReportConfigurationForm() {
           name="ticker"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-base">Company Ticker</FormLabel>
+              <FormLabel className="text-base font-semibold">종목 코드</FormLabel>
               <FormControl>
-                <Input placeholder="e.g., AAPL, GOOG" {...field} className="text-base"/>
+                <Input placeholder="예: AAPL, 005930" {...field} className="text-base"/>
               </FormControl>
               <FormDescription>
-                Enter the stock ticker symbol of the company.
+                분석할 회사의 주식 티커 또는 종목 코드를 입력하세요.
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -93,9 +93,9 @@ export function ReportConfigurationForm() {
           render={() => (
             <FormItem>
               <div className="mb-4">
-                <FormLabel className="text-base">Report Sections</FormLabel>
+                <FormLabel className="text-base font-semibold">보고서 섹션</FormLabel>
                 <FormDescription>
-                  Select the sections to include in the report.
+                  보고서에 포함할 섹션을 선택하세요.
                 </FormDescription>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -108,7 +108,7 @@ export function ReportConfigurationForm() {
                       return (
                         <FormItem
                           key={item.id}
-                          className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow-sm hover:shadow-md transition-shadow bg-background"
+                          className="flex flex-row items-center space-x-3 space-y-0 rounded-md border p-3 shadow-sm hover:shadow-md transition-shadow bg-background cursor-pointer has-[:checked]:border-primary has-[:checked]:ring-1 has-[:checked]:ring-primary"
                         >
                           <FormControl>
                             <Checkbox
@@ -122,9 +122,10 @@ export function ReportConfigurationForm() {
                                       )
                                     );
                               }}
+                              className="h-5 w-5"
                             />
                           </FormControl>
-                          <FormLabel className="font-normal text-sm cursor-pointer">
+                          <FormLabel className="font-normal text-sm cursor-pointer w-full py-1">
                             {item.label}
                           </FormLabel>
                         </FormItem>
@@ -143,24 +144,24 @@ export function ReportConfigurationForm() {
           name="detailLevel"
           render={({ field }) => (
             <FormItem className="space-y-3">
-              <FormLabel className="text-base">Level of Detail</FormLabel>
+              <FormLabel className="text-base font-semibold">상세 수준</FormLabel>
               <FormControl>
                 <RadioGroup
                   onValueChange={field.onChange}
                   defaultValue={field.value}
-                  className="flex flex-col space-y-1"
+                  className="flex flex-col space-y-2"
                 >
-                  <FormItem className="flex items-center space-x-3 space-y-0">
+                  <FormItem className="flex items-center space-x-3 space-y-0 p-3 border rounded-md has-[:checked]:border-primary has-[:checked]:ring-1 has-[:checked]:ring-primary">
                     <FormControl>
                       <RadioGroupItem value="concise" />
                     </FormControl>
-                    <FormLabel className="font-normal">Concise</FormLabel>
+                    <FormLabel className="font-normal cursor-pointer">요약된 분석</FormLabel>
                   </FormItem>
-                  <FormItem className="flex items-center space-x-3 space-y-0">
+                  <FormItem className="flex items-center space-x-3 space-y-0 p-3 border rounded-md has-[:checked]:border-primary has-[:checked]:ring-1 has-[:checked]:ring-primary">
                     <FormControl>
                       <RadioGroupItem value="detailed" />
                     </FormControl>
-                    <FormLabel className="font-normal">Detailed</FormLabel>
+                    <FormLabel className="font-normal cursor-pointer">상세 분석</FormLabel>
                   </FormItem>
                 </RadioGroup>
               </FormControl>
@@ -169,8 +170,8 @@ export function ReportConfigurationForm() {
           )}
         />
         
-        <Button type="submit" className="w-full text-lg py-6 bg-primary hover:bg-primary/90">
-          Generate Report
+        <Button type="submit" className="w-full text-lg py-6 bg-primary hover:bg-primary/90 text-primary-foreground">
+          보고서 생성
         </Button>
       </form>
     </Form>

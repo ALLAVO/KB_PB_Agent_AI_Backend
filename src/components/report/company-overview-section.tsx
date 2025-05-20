@@ -9,29 +9,29 @@ export async function CompanyOverviewSection({ companyName }: CompanyOverviewSec
   // In a real app, fetch company overview data based on companyName
   // This is a placeholder
   const overviewData = {
-    description: `This is a placeholder overview for ${companyName.toUpperCase()}. It would typically include information about the company's history, mission, products, and market position.`,
-    industry: "Technology",
-    ceo: "Jane Doe",
-    founded: "2000",
-    headquarters: "Silicon Valley, CA"
+    description: `${companyName.toUpperCase()}에 대한 개요입니다. 일반적으로 회사의 역사, 미션, 제품 및 시장에서의 위치와 같은 정보가 포함됩니다.`,
+    industry: "정보기술",
+    ceo: "김철수",
+    founded: "2000년",
+    headquarters: "대한민국 서울"
   };
 
   return (
-    <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300">
+    <Card className="shadow-lg hover:shadow-xl transition-shadow duration-300 border-l-4 border-primary">
       <CardHeader>
-        <CardTitle className="flex items-center text-2xl text-primary">
-          <Building2 className="mr-3 h-7 w-7" />
-          Company Overview: {companyName.toUpperCase()}
+        <CardTitle className="flex items-center text-2xl text-[hsl(var(--primary-text-on-light))]">
+          <Building2 className="mr-3 h-7 w-7 text-primary" />
+          기업 개요: {companyName.toUpperCase()}
         </CardTitle>
-        <CardDescription>A brief look at the company.</CardDescription>
+        <CardDescription>회사에 대한 간략한 소개입니다.</CardDescription>
       </CardHeader>
-      <CardContent className="space-y-3">
+      <CardContent className="space-y-3 pt-0">
         <p className="text-foreground leading-relaxed">{overviewData.description}</p>
-        <div className="grid grid-cols-2 gap-x-4 gap-y-2 pt-2 text-sm">
-          <div><strong className="font-medium text-muted-foreground">Industry:</strong> {overviewData.industry}</div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 pt-2 text-sm">
+          <div><strong className="font-medium text-muted-foreground">산업:</strong> {overviewData.industry}</div>
           <div><strong className="font-medium text-muted-foreground">CEO:</strong> {overviewData.ceo}</div>
-          <div><strong className="font-medium text-muted-foreground">Founded:</strong> {overviewData.founded}</div>
-          <div><strong className="font-medium text-muted-foreground">Headquarters:</strong> {overviewData.headquarters}</div>
+          <div><strong className="font-medium text-muted-foreground">설립 연도:</strong> {overviewData.founded}</div>
+          <div><strong className="font-medium text-muted-foreground">본사:</strong> {overviewData.headquarters}</div>
         </div>
       </CardContent>
     </Card>
